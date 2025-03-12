@@ -1,0 +1,89 @@
+buildscript {
+	ext {
+		springBootVersion = "1.4.3.RELEASE"
+	}
+	repositories {
+		mavenCentral()
+		maven { url "http://repo.spring.io/release" }
+		maven { url "http://repo.spring.io/milestone" }
+		maven { url "http://repo.spring.io/snapshot" }
+	}
+	dependencies {
+		classpath "io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE"
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+	}
+}
+
+apply plugin: "io.spring.dependency-management"
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.boot:spring-boot-starter-parent:${springBootVersion}"
+	}
+}
+
+apply plugin: "java"
+apply plugin: "eclipse"
+apply plugin: "org.springframework.boot"
+apply plugin: "maven-publish"
+
+repositories {
+	mavenCentral()
+	maven { url "http://repo.spring.io/release" }
+	maven { url "http://repo.spring.io/milestone" }
+	maven { url "http://repo.spring.io/snapshot" }
+	maven {
+        url project.property("aws.mvnrepo.releases.url")
+        credentials(AwsCredentials) {
+			accessKey project.property("aws.credentials.accesskey")
+            secretKey project.property("aws.credentials.secretkey")
+        }
+    }
+}
+
+dependencies {
+	compile group: "commons-beanutils", name: "commons-beanutils", version: "1.9.2"
+	compile group: "commons-validator", name: "commons-validator", version: "1.6"
+	compile group: "io.swipepay", name: "crypto-service-lib", version: "1.0.5"
+	compile group: "org.apache.commons", name: "commons-lang3", version: "3.5"
+	compile group: "org.hibernate", name: "hibernate-java8", version: "5.0.11.Final"
+	compile group: "org.mariadb.jdbc", name: "mariadb-java-client", version: "1.5.6"
+	compile group: "org.springframework.boot", name: "spring-boot-configuration-processor"
+	compile group: "org.springframework.boot", name: "spring-boot-devtools"
+	compile group: "org.springframework.boot", name: "spring-boot-starter-actuator"
+	compile group: "org.springframework.boot", name: "spring-boot-starter-data-jpa"
+	compile group: "org.springframework.boot", name: "spring-boot-starter-security"
+	compile group: "org.springframework.boot", name: "spring-boot-starter-thymeleaf"
+	compile group: "org.springframework.boot", name: "spring-boot-starter-web"
+	compile group: "org.webjars.bower", name: "datatables.net", version: "1.10.15"
+	compile group: "org.webjars.bower", name: "jquery", version: "3.2.1"
+	compile group: "org.webjars.bower", name: "semantic-ui", version: "2.2.9"
+	compile group: "org.webjars.bower", name: "slick-carousel", version: "1.6.0"
+	
+
+	
+	testCompile group: "org.springframework.boot", name: "spring-boot-starter-test"
+}
+
+publishing {
+	repositories {
+    	maven {
+	    	url project.property("aws.mvnrepo.releases.url")
+            credentials(AwsCredentials) {
+				accessKey project.property("aws.credentials.accesskey")
+            	secretKey project.property("aws.credentials.secretkey")
+            }
+        }
+    }
+    publications {
+    	mavenJava(MavenPublication) {
+    		groupId project.group
+    		version project.version
+    		from components.java
+    	}
+    }
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = "3.3"
+}
