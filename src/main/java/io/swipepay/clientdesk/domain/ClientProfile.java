@@ -1,0 +1,125 @@
+package io.swipepay.clientdesk.domain;
+
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+@Entity
+@Table(uniqueConstraints = {
+		@UniqueConstraint(columnNames = {"code", "client_id"})
+})
+public class ClientProfile {
+	@Id
+	@GeneratedValue
+	private Long id;
+
+	@Column(name = "code", nullable = false)
+	private String code;
+	
+	@Column(name = "name", nullable = false)
+	private String name;
+	
+	@Column(name = "enabled", nullable = false)
+	private Boolean enabled;
+	
+	@Column(name = "status", nullable = false)
+	private String status;
+	
+	@Column(name = "modified", nullable = false)
+	private LocalDateTime modified;
+	
+	@ManyToOne
+	@JoinColumn(name = "client_id", nullable = false)
+	private Client client;
+	
+	protected ClientProfile() {
+		
+	}
+
+	public ClientProfile(
+			String code, 
+			String name, 
+			Boolean enabled, 
+			String status, 
+			LocalDateTime modified, 
+			Client client) {
+		
+		this.code = code;
+		this.name = name;
+		this.enabled = enabled;
+		this.status = status;
+		this.modified = modified;
+		this.client = client;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public LocalDateTime getModified() {
+		return modified;
+	}
+
+	public void setModified(LocalDateTime modified) {
+		this.modified = modified;
+	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+	}
+}
