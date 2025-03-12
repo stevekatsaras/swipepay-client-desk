@@ -1,0 +1,20 @@
+body.background {
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	margin: 0;
+	padding: 0;
+}
+
+body.error {
+	background: url('/images/bg-error.jpg') no-repeat center center fixed;
+}
+
+.centerAlignHorizontalAndVertical {
+	align-items:center;
+	display:flex;
+	flex-direction:column;
+	justify-content:center;
+	min-height:100%;
+}
